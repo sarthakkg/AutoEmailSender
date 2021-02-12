@@ -1,10 +1,18 @@
 // EDIT THE FOLLOWING EVERY TIME
 
 var EMAIL_SUBJECT = 'Email Subject';
-var EMAIL_TEMPLATE_DOC_URL = 'https://docs.google.com/document/d/543543354352345432543_u3245';
+var EMAIL_TEMPLATE_DOC_URL = 'https://docs.google.com/document/d/543543354352345432543_u32454';
 var STATUS_COLUMN = "C"; // updates Google sheet column to track if email has been sent
 
-function sendEmail() {
+function installTrigger() {
+  ScriptApp.newTrigger('onFormSubmit')
+    .forSpreadsheet(SpreadsheetApp.getActive())
+    .onFormSubmit()
+    .create();
+}
+
+// sends a customized email for every response on a form
+function onFormSubmit() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
 
   // sets active sheet to "Unsubscribers"
