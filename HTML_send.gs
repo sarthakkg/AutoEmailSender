@@ -1,0 +1,81 @@
+// EDIT THE FOLLOWING EVERY TIME
+
+var EMAIL_SUBJECT = 'Email Subject';
+var NEWSLETTER_FILE = "Email_content.html";
+var STATUS_COLUMN = "N"; // updates Google sheet column to track if email has been sent
+
+function onFormSubmit() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+
+  // sets active sheet to "Unsubscribers"
+  SpreadsheetApp.setActiveSheet(sheet.getSheets()[1]);
+
+  // retrieves last filled in row in Google Sheet
+  var lastRowU = sheet.getLastRow();
+  var rangeU = "A2:A" + lastRowU;
+
+  // retrieves array of all emails
+  var dataRU = sheet.getRange(rangeU);
+  var unsubcribers = dataRU.getValues();
+
+
+  // sets active sheet to "Subscribers"
+  SpreadsheetApp.setActiveSheet(sheet.getSheets()[0]);
+
+  // retrieves last filled in row in Google Sheet
+  var lastRow = sheet.getLastRow();
+  var range = "A2:A" + lastRow;
+
+  // retrieves array of all emails
+  var dataR = sheet.getRange(range);
+  var subscribers = dataR.getValues();
+
+  for (var i in subscribers) {
+    var row = subscribers[i];
+    // var email = row[0];
+    var email = row[0];
+    var send = true;
+
+    for (var j in unsubcribers) {
+      var rowU = unsubcribers[j];
+      var emailU = rowU[0];
+      if (email == emailU) {
+        send = false;
+        break;
+      }
+    }
+    if (send != false) {
+      // console.log("Email: " + email);
+      try {
+        MailApp.sendEmail({
+          to: email,
+          subject: EMAIL_SUBJECT,
+          htmlBody: createEmailBody(),
+        });
+        var cellNum = parseInt(i) + 2;
+        var cell = STATUS_COLUMN + cellNum;
+
+        sheet.getRange(cell).setValue("Sent");
+      }
+      catch (err) {
+        console.log(err);
+        let cellNum = parseInt(i) + 2;
+        let cell = STATUS_COLUMN + cellNum;
+
+        sheet.getRange(cell).setValue("Sent").setBackground('red');
+      }
+    }
+    else {
+      let cellNum = parseInt(i) + 2;
+        let cell = STATUS_COLUMN + cellNum;
+
+        sheet.getRange(cell).setValue("Unsubscribed").setBackground('orange');
+    }
+  }
+}
+
+// Creates email body from HTML file.
+function createEmailBody() {
+  var emailBody = HtmlService.createHtmlOutputFromFile(NEWSLETTER_FILE).getContent();
+  return emailBody;
+}
