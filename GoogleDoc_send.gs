@@ -1,7 +1,7 @@
 // EDIT THE FOLLOWING EVERY TIME
 
 var EMAIL_SUBJECT = 'Email Subject';
-var NEWSLETTER_FILE = "Email_content.html";
+var EMAIL_TEMPLATE_DOC_URL = 'https://docs.google.com/document/d/543543354352345432543_u3245';
 var STATUS_COLUMN = "C"; // updates Google sheet column to track if email has been sent
 
 function sendEmail() {
@@ -76,6 +76,23 @@ function sendEmail() {
 
 // Creates email body from HTML file.
 function createEmailBody() {
-  var emailBody = HtmlService.createHtmlOutputFromFile(NEWSLETTER_FILE).getContent();
+  // Make sure to update the emailTemplateDocId at the top.
+
+  var docId = DocumentApp.openByUrl(EMAIL_TEMPLATE_DOC_URL).getId();
+  var emailBody = docToHtml(docId);
+  emailBody = emailBody.replace(/{{NAME}}/g, name);
+
   return emailBody;
+}
+
+// Downloads a Google Doc as an HTML string
+function docToHtml(docId) {
+  // Downloads a Google Doc as an HTML string.
+  var url = "https://docs.google.com/feeds/download/documents/export/Export?id=" + docId + "&exportFormat=html";
+  var param = {
+    method: "get",
+    headers: { "Authorization": "Bearer " + ScriptApp.getOAuthToken() },
+    muteHttpExceptions: true,
+  };
+  return UrlFetchApp.fetch(url, param).getContentText();
 }
