@@ -2,7 +2,7 @@
 
 var EMAIL_SUBJECT = 'Email Subject';
 var NEWSLETTER_FILE = "Email_content.html";
-var STATUS_COLUMN = "N"; // updates Google sheet column to track if email has been sent
+var STATUS_COLUMN = "C"; // updates Google sheet column to track if email has been sent
 
 function onFormSubmit() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -16,7 +16,7 @@ function onFormSubmit() {
 
   // retrieves array of all emails
   var dataRU = sheet.getRange(rangeU);
-  var unsubcribers = dataRU.getValues();
+  var unsubscribers = dataRU.getValues();
 
 
   // sets active sheet to "Subscribers"
