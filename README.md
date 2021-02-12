@@ -14,7 +14,7 @@ Allows you to send upto 10,000 emails per day for free without paying for expens
 7. Run as desired.
 
 ## Optional Functionality with Google Forms
-### Used to Automate Subscriber List and Unsubscribed List
+#### Used to Automate Subscriber List and Unsubscribed List
 1. Create a new Google Form at [Google Drive](https://drive.google.com).
 2. Click Settings logo in the top-right corner.
 3. Click "Collect email addresses".
@@ -27,4 +27,7 @@ Allows you to send upto 10,000 emails per day for free without paying for expens
 ## Types of Email Functionality
 
 1. HTML_send.gs coverts an HTML file (with CSS) to send in an email.
-2. 
+2. GoogleDoc_send.gs converts a Google Doc to send in an email.
+   It also personalizes each email with the name retrieved from the Google Sheet into the Google Doc at this location: {{Name}}.
+3. GoogleForm_send.gs sends an email as soon as a new entry is added from a Google Form submission.
+   If Optional Functionality with Google Form (as shown above) is integrated, you can trigger an email to be automatically send whenever a user submits the form. It also personalizes based on name.
